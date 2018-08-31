@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--加载属性文件,进行数据库链接-->
+    <context:property-placeholder location="classpath:pg.properties"/>
+    <!--配置service扫描-->
+    <context:component-scan base-package="com.sims"/>
+    <!--使用cglib进行动态代理-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <!--注解事务开启-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <!--配置jpa仓库-->
+    <jpa:repositories base-package="com.sims.Repository" repository-impl-postfix="Impl"
+                      transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+
+    <!--用于指定持久化实现厂商类，如hibernate为：org.hibernate.ejb.HibernateProvider 类。-->
+    <bean id="persistenceProvider" class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="generateDdl" value="false"/>
+        <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQL91Dialect"/>
+        <property name="database" value="POSTGRESQL"/>
+        <property name="showSql" value="true"/>
+    </bean>
+    <!--jpa实体管理器工厂-->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <!--指定实体类的位置-->
+        <property name="packagesToScan" value="com.sims.Entity"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceProvider" ref="persistenceProvider"/>
+        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+        <property name="jpaDialect" value="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.query.substitutions" value="true 1, false 0" />
+                <entry key="hibernate.default_batch_fetch_size" value="16" />
+                <entry key="hibernate.max_fetch_depth" value="2" />
+                <entry key="hibernate.generate_statistics" value="true" />
+                <entry key="hibernate.bytecode.use_reflection_optimizer" value="true" />
+                <entry key="hibernate.cache.use_second_level_cache" value="false" />
+                <entry key="hibernate.cache.use_query_cache" value="false" />
+            </map>
+        </property>
+    </bean>
+    <!--开启spring事务管理器-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="1" />
+        <property name="minIdle" value="1" />
+        <property name="maxActive" value="20" />
+        <property name="maxWait" value="60000" />
+    </bean>
+    <!-- 事务 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="select*" read-only="true" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+    <!-- 事务入口 -->
+    <aop:config>
+        <aop:pointcut id="allServiceMethod" expression="execution(* com.sims.Service..*.*(..))" />
+        <aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice" />
+    </aop:config>
+</beans>
