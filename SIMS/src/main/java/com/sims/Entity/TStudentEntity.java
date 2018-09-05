@@ -1,8 +1,7 @@
 package com.sims.Entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "t_student", schema = "public", catalog = "taihua")
@@ -14,8 +13,6 @@ public class TStudentEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid.hex")
     public String getId() {
         return id;
     }
@@ -58,23 +55,15 @@ public class TStudentEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         TStudentEntity that = (TStudentEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (sex != null ? !sex.equals(that.sex) : that.sex != null) return false;
-        if (remark != null ? !remark.equals(that.remark) : that.remark != null) return false;
-
-        return true;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(sex, that.sex) &&
+                Objects.equals(remark, that.remark);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (sex != null ? sex.hashCode() : 0);
-        result = 31 * result + (remark != null ? remark.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name, sex, remark);
     }
 }

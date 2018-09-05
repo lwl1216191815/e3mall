@@ -1,7 +1,7 @@
 package com.sims.Service.Impl;
 
 import com.sims.Entity.TStudentEntity;
-import com.sims.Repository.IStudentRepository;
+import com.sims.Repository.TStudentRepository;
 import com.sims.Service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class StudentServiceImpl implements IStudentService {
     @Autowired
-    private IStudentRepository studentRepository;
+    private TStudentRepository studentRepository;
     @Override
     public List<TStudentEntity> getStudent() {
 
@@ -20,7 +20,6 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public void saveStudent(TStudentEntity studentEntity) {
 
-        studentRepository.save(studentEntity);
     }
 }
 

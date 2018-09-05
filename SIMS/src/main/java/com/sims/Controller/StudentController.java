@@ -1,7 +1,6 @@
 package com.sims.Controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.sims.Entity.TStudentEntity;
 import com.sims.Service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,9 @@ public class StudentController {
         return entityList;
     }
 
-    @RequestMapping(value = "saveStudent.action")
+   /* @RequestMapping(value = "saveStudent.action")
     public void saveStudent(String json){
         TStudentEntity studentEntity = JSONObject.parseObject(json, TStudentEntity.class);
         studentService.saveStudent(studentEntity);
-    }
+    }*/
 }
