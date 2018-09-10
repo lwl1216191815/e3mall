@@ -3,7 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -11,15 +10,11 @@
        http://www.springframework.org/schema/data/jpa
        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd
-       http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!--加载属性文件,进行数据库链接-->
     <context:property-placeholder location="classpath:db/pg.properties"/>
-    <!--使用cglib进行动态代理-->
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
     <!--注解事务开启-->
-    <tx:annotation-driven  proxy-target-class="true"/>
+    <tx:annotation-driven/>
     <!--配置jpa仓库-->
     <jpa:repositories base-package="com.sims.Repository" repository-impl-postfix="Impl"
                       transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
@@ -37,9 +32,16 @@
         <!--指定实体类的位置-->
         <property name="packagesToScan" value="com.sims.Entity"/>
         <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceProvider" ref="persistenceProvider"/>
         <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-        <property name="jpaDialect" value="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
     </bean>
     <!--开启spring事务管理器-->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -56,23 +58,6 @@
         <property name="maxActive" value="${jdbc.maxActive}" />
         <property name="maxWait" value="${jdbc.maxWait}" />
     </bean>
-    <!-- 事务 -->
-    <tx:advice id="txAdvice" >
-        <tx:attributes>
-            <tx:method name="*" />
-            <tx:method name="get*" read-only="true" />
-            <tx:method name="find*" read-only="true" />
-            <tx:method name="select*" read-only="true" />
-            <tx:method name="delete*"/>
-            <tx:method name="update*"  />
-            <tx:method name="add*"  />
-            <tx:method name="save*"  />
-            <tx:method name="insert*"  />
-        </tx:attributes>
-    </tx:advice>
-    <!-- 事务入口 -->
-    <aop:config>
-        <aop:pointcut id="allServiceMethod" expression="execution(* com.sims.Service..*.*(..))" />
-        <aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice" />
-    </aop:config>
+
+
 </beans>
