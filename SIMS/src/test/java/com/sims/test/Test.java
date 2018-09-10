@@ -7,11 +7,20 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+/**
+ * 测试spring容器是否创建成功
+ * @author 龙帅
+ *
+ */
 public class Test {
 
-	public static void main(String[] args) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:TestapplicationContext.xml");
-		DataSource bean = (DruidDataSource) context.getBean("dataSource");
+	private static ApplicationContext applicationContext;
+	static {
+		applicationContext= new ClassPathXmlApplicationContext("classpath:spring/applicationContext-dao.xml");
+	}
+    @org.junit.Test
+	public void testSpringIoc() {
+		DataSource bean = (DruidDataSource) applicationContext.getBean("dataSource");
 		try {
 			System.out.println(bean.getConnection());
 		}catch (SQLException e){

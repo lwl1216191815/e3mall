@@ -12,13 +12,13 @@
         <jsp-about-scope>provided</jsp-about-scope>
         <servlet-version>2.5</servlet-version>
         <fastjson-version>1.2.47</fastjson-version>
-        <jackson-version>2.4.2</jackson-version>
+        <jackson-version>2.9.5</jackson-version>
         <postgresql-version>42.2.2</postgresql-version>
-        <spring-version>4.2.4.RELEASE</spring-version>
-        <hibernate-version>5.3.5.Final</hibernate-version>
-        <hibernate-jpa-version>1.0.0.Final</hibernate-jpa-version>
+        <spring-version>4.3.11.RELEASE</spring-version>
+        <hibernate-version>5.0.11.Final</hibernate-version>
+        <!--<hibernate-jpa-version>1.0.0.Final</hibernate-jpa-version>-->
         <druid-version>1.1.10</druid-version>
-        <spring-data-version>2.0.9.RELEASE</spring-data-version>
+        <spring-data-version>1.11.7.RELEASE</spring-data-version>
         <junit-version>4.12</junit-version>
         <junit-scope>test</junit-scope>
         <javassist-version>3.11.0.GA</javassist-version>
@@ -44,6 +44,7 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson-version}</version>
         </dependency>
+        <!--@ResponseBody注解所需要的json转换工具-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -79,11 +80,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate-version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate-jpa-version}</version>
-        </dependency>
 
         <!--druid连接池-->
         <dependency>
@@ -98,12 +94,18 @@
             <artifactId>javassist</artifactId>
             <version>${javassist-version}</version>
         </dependency>
-        <!--spring相关-->
+        <!--springMVC相关-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <!--引入spring-data-jpa-->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
@@ -111,55 +113,14 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
             <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-
-        <!--aspectj-->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspect-version}</version>
         </dependency>
 
     </dependencies>
     <build>
         <plugins>
+            <!--tomcat插件-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -175,7 +136,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
+                    <!--源码采用1.8-->
                     <source>1.8</source>
+                    <!--打包使用1.8-->
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>

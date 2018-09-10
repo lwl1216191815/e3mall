@@ -19,7 +19,7 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public void saveStudent(TStudentEntity studentEntity) {
-
+        studentRepository.saveAndFlush(studentEntity);
     }
 }
 
