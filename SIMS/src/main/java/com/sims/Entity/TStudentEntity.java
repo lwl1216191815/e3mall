@@ -1,5 +1,7 @@
 package com.sims.Entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,6 +15,8 @@ public class TStudentEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
     public String getId() {
         return id;
     }
