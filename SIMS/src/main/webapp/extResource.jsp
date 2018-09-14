@@ -14,7 +14,7 @@
 <html>
 <head>
     <link href="<%=basePath%>css/css/font-awesome.css" rel="stylesheet">
-    <link href="<%=basePath%>css/ext/resources/css/ext-all.css" rel="stylesheet">
+    <link href="<%=basePath%>css/ext/resources/ext-theme-neptune/ext-theme-neptune-all.css" rel="stylesheet">
     <script type="text/javascript" src="<%=basePath%>js/ext/ext-all.js"></script>
     <script type="text/javascript" src="<%=basePath%>js/ext/ext-lang-zh_CN.js" charset="UTF-8"></script>
 </head>
