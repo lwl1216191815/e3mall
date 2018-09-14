@@ -3,7 +3,7 @@
  */
 Ext.define('SIMS.StudentWin', {
     extend: 'Ext.window.Window',
-    title: '添加学生的窗口',
+    title: '',
     height: 500,
     width: 550,
     layout: 'fit',
@@ -12,7 +12,9 @@ Ext.define('SIMS.StudentWin', {
     border: 10,
     modal: true,
     contextPath: '',
-
+    /**
+     * 初始化组件
+     */
     initComponent: function () {
         var me = this;
         me.formItems = [
@@ -70,6 +72,8 @@ Ext.define('SIMS.StudentWin', {
             },
             items: me.formItems
         });
+
+
         Ext.apply(this, {
             items: [me.form],
             buttons: [
@@ -94,6 +98,7 @@ Ext.define('SIMS.StudentWin', {
                             },
                             success: function () {
                                 Ext.Msg.alert("提示", "增加成功");
+                                me.fireEvent('refreshData',me);
                                 me.hide();
                             },
                             failure: function () {
@@ -114,4 +119,12 @@ Ext.define('SIMS.StudentWin', {
         });
         this.callParent(arguments);
     },
+    /**
+     * 回显数据
+     * @param data 数据
+     */
+    reviewData : function (data) {
+       var me = this;
+       me.form.loadRecord(data);
+    }
 });
