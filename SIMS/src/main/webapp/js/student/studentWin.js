@@ -19,6 +19,11 @@ Ext.define('SIMS.StudentWin', {
         var me = this;
         me.formItems = [
             {
+                xtype : 'textfield',
+                name : 'id',
+                hidden : true
+            },
+            {
                 xtype: 'textfield',
                 allowBlank: false,
                 length: 100,
@@ -88,7 +93,12 @@ Ext.define('SIMS.StudentWin', {
                             return;
                         }
                         var param = me.form.getForm().getValues();
-                        var url = me.contextPath + 'student/saveStudent.action';
+                        var url = me.contextPath;
+                        if(param.id==undefined || param.id==''){
+                           url +=  'student/saveStudent.action';
+                        }else{
+                          url += 'student/modifyStudent.action';
+                        }
                         Ext.Ajax.request({
                             url: url,
                             method: 'POST',
@@ -97,12 +107,12 @@ Ext.define('SIMS.StudentWin', {
                                 json: Ext.JSON.encode(param)
                             },
                             success: function () {
-                                Ext.Msg.alert("提示", "增加成功");
+                                Ext.Msg.alert("提示", "操作成功");
                                 me.fireEvent('refreshData',me);
                                 me.hide();
                             },
                             failure: function () {
-                                Ext.Msg.alert("提示", "增加失败");
+                                Ext.Msg.alert("提示", "操作失败");
                             }
                         });
 

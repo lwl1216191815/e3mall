@@ -22,4 +22,10 @@ public interface IStudentService {
      * @param studentEntity 要保存的学生记录
      */
     void saveStudent(TStudentEntity studentEntity);
+
+    /**
+     * 根据id修改学生信息
+     * @param studentEntity
+     */
+    void modifyStudent(TStudentEntity studentEntity);
 }

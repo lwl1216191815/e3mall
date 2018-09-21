@@ -23,5 +23,13 @@ public class StudentServiceImpl implements IStudentService {
     public void saveStudent(TStudentEntity studentEntity) {
         studentRepository.saveAndFlush(studentEntity);
     }
+
+    @Override
+    public void modifyStudent(TStudentEntity studentEntity) {
+        TStudentEntity tStudentEntity = studentRepository.findOne(studentEntity.getId());
+        tStudentEntity.setName(studentEntity.getName());
+        tStudentEntity.setSex(studentEntity.getSex());
+        tStudentEntity.setRemark(studentEntity.getRemark());
+    }
 }
 

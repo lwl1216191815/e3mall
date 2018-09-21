@@ -32,9 +32,23 @@ public class StudentController {
         return entityList;
     }
 
+    /**
+     * 增加学生信息
+     * @param json
+     */
     @RequestMapping(value = "saveStudent.action")
     public void saveStudent(String json){
         TStudentEntity studentEntity = JSONObject.parseObject(json, TStudentEntity.class);
         studentService.saveStudent(studentEntity);
+    }
+
+    /**
+     * 修改学生信息
+     * @param json
+     */
+    @RequestMapping(value = "modifyStudent.action")
+    public void modifyStudent(String json){
+        TStudentEntity studentEntity = JSONObject.parseObject(json, TStudentEntity.class);
+        studentService.modifyStudent(studentEntity);
     }
 }
