@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.sims.Entity.TStudentEntity;
 import com.sims.Service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * 学生管理控制层
@@ -26,10 +29,10 @@ public class StudentController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "getStudent.action")
-    public List<TStudentEntity> getStudent(){
-        List<TStudentEntity> entityList = studentService.getStudent();
-        return entityList;
+    @RequestMapping(value = "getStudentByCondition.action")
+    public Page<TStudentEntity> getStudent(Integer limit, Integer page){
+        Pageable pageable = new PageRequest(page-1,limit);
+        return studentService.getStudent(pageable);
     }
 
     /**
@@ -48,7 +51,17 @@ public class StudentController {
      */
     @RequestMapping(value = "modifyStudent.action")
     public void modifyStudent(String json){
-        TStudentEntity studentEntity = JSONObject.parseObject(json, TStudentEntity.class);
-        studentService.modifyStudent(studentEntity);
+        Map<String,Object> params = JSONObject.parseObject(json, Map.class);
+        studentService.modifyStudent(params);
+    }
+
+
+    /**
+     *
+     * @param ids
+     */
+    @RequestMapping(value = "removeStudent.action")
+    public void removeStudent(String[] ids){
+        studentService.removeStudent(ids);
     }
 }

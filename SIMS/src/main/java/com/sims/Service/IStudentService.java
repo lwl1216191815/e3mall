@@ -1,8 +1,10 @@
 package com.sims.Service;
 
 import com.sims.Entity.TStudentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -14,7 +16,7 @@ public interface IStudentService {
      *
      * @return学生列表
      */
-    List<TStudentEntity> getStudent();
+    Page<TStudentEntity> getStudent(Pageable pageable);
 
     /**
      * 向数据库中保存一条学生信息
@@ -25,7 +27,13 @@ public interface IStudentService {
 
     /**
      * 根据id修改学生信息
-     * @param studentEntity
+     * @param params
      */
-    void modifyStudent(TStudentEntity studentEntity);
+    void modifyStudent(Map<String,Object> params);
+
+    /**
+     * 根据id删除学生
+     * @param ids
+     */
+    void removeStudent(String[] ids);
 }

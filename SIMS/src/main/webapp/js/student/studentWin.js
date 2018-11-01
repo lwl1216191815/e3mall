@@ -102,7 +102,7 @@ Ext.define('SIMS.StudentWin', {
                         Ext.Ajax.request({
                             url: url,
                             method: 'POST',
-                            waitMsg: '正在保存',
+                            waitMsg: '正在操作',
                             params: {
                                 json: Ext.JSON.encode(param)
                             },

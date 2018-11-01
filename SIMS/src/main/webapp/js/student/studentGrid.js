@@ -38,7 +38,7 @@ Ext.define('SIMS.StudentGrid', {
                 dataIndex: 'sex',
                 width: 80,
                 renderer : function (value) {
-                    if(value == '0'){
+                    if(value === '0'){
                         return '男';
                     }else{
                         return '女';
@@ -57,10 +57,15 @@ Ext.define('SIMS.StudentGrid', {
             pageSize: 5,
             proxy: {
                 type: 'ajax',
-                url: me.contextPath + 'student/getStudent.action',
+                url: me.contextPath + 'student/getStudentByCondition.action',
                 reader: {
                     type: 'json',
-                    root: ''
+                    root: 'content',
+                    totalProperty : 'totalElements'
+                }
+            },
+            listeners : {
+                'beforeload' : function(store,operation,eOpts){
                 }
             }
         });
@@ -83,8 +88,22 @@ Ext.define('SIMS.StudentGrid', {
                     handler : function(){
                         me.modifyStudent();
                     }
+                },
+                {
+                    text : '删除',
+                    xtype : 'button',
+                    iconCls : 'icon-remove',
+                    handler : function(){
+                        var ids = me.getSelectedIds();
+                        console.log(ids);
+                        me.removeStudent(ids);
+                    }
                 }
-            ]
+            ],
+            bbar : Ext.create('Ext.PagingToolbar',{
+                store: me.store,
+                displayInfo : true
+            })
         });
         me.callParent();
     },
@@ -103,7 +122,34 @@ Ext.define('SIMS.StudentGrid', {
      */
     queryData : function () {
         var me = this;
+        //me.jsonParam = data;
         me.store.loadPage(1);
+    },
+    /**
+     * 删除学生
+     * @param ids
+     */
+    removeStudent : function(ids){
+        var me = this;
+        Ext.Msg.confirm("提示","是否删除选中记录",function (option) {
+            if(option==="yes"){
+                Ext.Ajax.request({
+                    url: me.contextPath + 'student/removeStudent.action',
+                    method: 'POST',
+                    waitMsg: '正在操作',
+                    params: {
+                        ids:ids
+                    },
+                    success: function () {
+                        Ext.Msg.alert("提示", "操作成功");
+                        me.queryData();
+                    },
+                    failure: function () {
+                        Ext.Msg.alert("提示", "操作失败");
+                    }
+                });
+            }
+        },me);
     },
     /**
      * 更改学生信息的方法
@@ -129,10 +175,14 @@ Ext.define('SIMS.StudentGrid', {
      */
     getSelectedIds : function(){
         var me = this;
+        var ids = [];
         var rows = me.getSelectionModel().getSelection();
         if(rows.length == 0){
               Ext.Msg.alert("警告","请选择一条记录");
         }
-        return rows;
+        for(var i = 0 ; i < rows.length ; i++){
+            ids.push(rows[i].data.id);
+        }
+        return ids;
     }
 });
