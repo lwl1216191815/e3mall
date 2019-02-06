@@ -1,5 +1,6 @@
 package cn.e3mall.controller;
 
+import cn.e3mall.common.pojo.EasyUIDataGridResult;
 import cn.e3mall.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import cn.e3mall.pojo.TbItem;
  * 商品管理controller
  */
 @Controller
+@RequestMapping("/item")
 public class ItemController {
 
 	/**
@@ -22,10 +24,22 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 
-	@RequestMapping(value="/item/{itemId}")
+	@RequestMapping(value="/{itemId}")
 	@ResponseBody
 	public TbItem getItemById(@PathVariable Long itemId) {
 		TbItem tbItem = itemService.getItemById(itemId);
 		return tbItem;
+	}
+
+	/**
+	 * 分页查询商品列表
+	 * @param page
+	 * @param rows
+	 * @return
+	 */
+	@RequestMapping("/list")
+	@ResponseBody
+	public EasyUIDataGridResult<TbItem> getItemList(Integer page,Integer rows){
+      return  itemService.getItemList(page,rows);
 	}
 }
