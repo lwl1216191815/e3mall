@@ -11,11 +11,13 @@
 
 	<context:component-scan base-package="cn.e3mall.controller" />
 	<mvc:annotation-driven />
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	<!--静态资源放行-->
+	<mvc:resources mapping="/js/**" location="/js/"/>
+	<mvc:resources mapping="/css/**" location="/css/"/>
 	<!-- 引用dubbo服务 -->
 	<dubbo:application name="e3-manager-web"/>
 	<dubbo:registry protocol="zookeeper" address="47.93.38.3:2181"/>
