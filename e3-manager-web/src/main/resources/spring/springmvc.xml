@@ -33,7 +33,7 @@
 	<dubbo:reference interface="cn.e3mall.service.ItemParamItemService" id="itemParamItemService" />
 	<dubbo:reference interface="cn.e3mall.content.service.ContentCategoryService" id="contentCategoryService" />
 	<dubbo:reference interface="cn.e3mall.content.service.ContentService" id="contentService"/>
-	<dubbo:reference interface="cn.e3mall.search.service.SearchService" id="searchService"/>
+	<dubbo:reference interface="cn.e3mall.search.service.SearchItemService" id="searchItemService"/>
 	<!-- 静态资源放行 -->
 	<mvc:resources location="/css/" mapping="/css/**"/>
 	<mvc:resources location="/js/" mapping="/js/**"/>
