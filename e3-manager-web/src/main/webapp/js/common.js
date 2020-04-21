@@ -232,6 +232,7 @@ var E3 = {
      * 上传完成后会设置input内容以及在input后面追加<img> 
      */
     initOnePicUpload : function(){
+    	var me = this;
     	$(".onePicUpload").click(function(){
 			var _self = $(this);
 			KindEditor.editor(E3.kingEditorParams).loadPlugin('image', function() {
