@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:mvc="http://www.springframework.org/schema/mvc"
-	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 	<context:component-scan base-package="cn.e3mall.controller" />
 	<mvc:annotation-driven />
@@ -15,12 +16,26 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	<!--静态资源放行-->
-	<mvc:resources mapping="/js/**" location="/js/"/>
-	<mvc:resources mapping="/css/**" location="/css/"/>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设定默认编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+		<property name="maxUploadSize" value="5242880"></property>
+	</bean>
+	
 	<!-- 引用dubbo服务 -->
-	<dubbo:application name="e3-manager-web"/>
-	<dubbo:registry protocol="zookeeper" address="47.93.38.3:2181"/>
+	<dubbo:application name="e3-manage-web" />
+	<dubbo:registry protocol="zookeeper" address="47.93.38.3:2181" />
 	<dubbo:reference interface="cn.e3mall.service.ItemService" id="itemService" />
-    <dubbo:reference interface="cn.e3mall.service.ItemCatService" id="itemCatService"/>
+	<dubbo:reference interface="cn.e3mall.service.ItemCatService" id="itemCatService" />
+	<dubbo:reference interface="cn.e3mall.service.PictureService" id="pictureService" />
+	<dubbo:reference interface="cn.e3mall.service.ItemDescService" id="itemDescService" />
+	<dubbo:reference interface="cn.e3mall.service.ItemParamItemService" id="itemParamItemService" />
+	<dubbo:reference interface="cn.e3mall.content.service.ContentCategoryService" id="contentCategoryService" />
+	<dubbo:reference interface="cn.e3mall.content.service.ContentService" id="contentService"/>
+	<dubbo:reference interface="cn.e3mall.search.service.SearchService" id="searchService"/>
+	<!-- 静态资源放行 -->
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/js/" mapping="/js/**"/>
+
 </beans>
