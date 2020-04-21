@@ -1,17 +1,14 @@
 package cn.e3mall.service;
 
-import cn.e3mall.common.pojo.EasyUITreeNode;
-
 import java.util.List;
 
-/**
- * 商品分类service
- */
+import cn.e3mall.common.pojo.EasyUITreeNode;
+
 public interface ItemCatService {
-    /**
-     * 查询商品分类树形结构
-     * @param parentId 当前节点父节点ID
-     * @return
-     */
-    List<EasyUITreeNode> getItemCatList(Long parentId);
+	
+	/**
+	 * 获取商品类目树形结构
+	 * @return
+	 */
+	List<EasyUITreeNode> getCatList(long parentId);
 }
