@@ -1,43 +1,48 @@
 package cn.e3mall.common.pojo;
 
 import java.io.Serializable;
-
+/**
+ * easyUI树形节点
+ * @author Dragon
+ *
+ */
 public class EasyUITreeNode implements Serializable {
-    /**
-     *
-     * id
-     */
-    private Long id;
-    /**
-     * text
-     */
-    private String text;
-    /**
-     * state
-     */
-    private String state;
 
-    public Long getId() {
-        return id;
-    }
+	/**
+	 * 默认的序列化
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private long id;
+	
+	private String text;
+	
+	private String state;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+	
+	
+
 }
