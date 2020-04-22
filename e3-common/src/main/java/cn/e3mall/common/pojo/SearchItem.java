@@ -31,7 +31,7 @@ public class SearchItem implements Serializable{
 	/**
 	 * 商品图片
 	 */
-	private String image;
+	private String images;
 	/**
 	 * 商品类型名称
 	 */
@@ -60,11 +60,11 @@ public class SearchItem implements Serializable{
 	public void setPrice(Long price) {
 		this.price = price;
 	}
-	public String getImage() {
-		return image;
+	public String getImages() {
+		return images;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setImages(String images) {
+		this.images = images;
 	}
 	public String getCategoryName() {
 		return categoryName;
