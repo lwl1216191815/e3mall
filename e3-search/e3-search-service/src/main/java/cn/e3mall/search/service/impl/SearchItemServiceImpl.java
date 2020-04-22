@@ -28,7 +28,7 @@ public class SearchItemServiceImpl implements SearchItemService {
 				document.addField(SearchItemConstant.ID, item.getId());
 				document.addField(SearchItemConstant.ITEM_TITLE, item.getTitle());
 				document.addField(SearchItemConstant.ITEM_SELL_POINT, item.getSellPoint());
-				document.addField(SearchItemConstant.ITEM_IMAGE, item.getImage());
+				document.addField(SearchItemConstant.ITEM_IMAGE, item.getImages());
 				document.addField(SearchItemConstant.ITEM_PRICE, item.getPrice());
 				document.addField(SearchItemConstant.ITEM_CATEGORY_NAME, item.getCategoryName());
 				solrClient.add(document);
