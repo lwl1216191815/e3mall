@@ -41,4 +41,21 @@ public class SearchItemServiceImpl implements SearchItemService {
 		}
 	}
 
+	public E3Result addDocument(Long itemId) throws Exception{
+		if(itemId == null){
+			throw new NullPointerException("itemId为null");
+		}
+		SearchItem item = itemMapper.getItemById(itemId);
+		SolrInputDocument document = new SolrInputDocument();
+		document.addField(SearchItemConstant.ID, item.getId());
+		document.addField(SearchItemConstant.ITEM_TITLE, item.getTitle());
+		document.addField(SearchItemConstant.ITEM_SELL_POINT, item.getSellPoint());
+		document.addField(SearchItemConstant.ITEM_IMAGE, item.getImages());
+		document.addField(SearchItemConstant.ITEM_PRICE, item.getPrice());
+		document.addField(SearchItemConstant.ITEM_CATEGORY_NAME, item.getCategoryName());
+		solrClient.add(document);
+		solrClient.commit();
+		return E3Result.ok();
+	}
+
 }
