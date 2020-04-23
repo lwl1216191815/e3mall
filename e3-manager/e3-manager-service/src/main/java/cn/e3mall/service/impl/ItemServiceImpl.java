@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.e3mall.common.jedis.JedisClient;
+import cn.e3mall.common.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -46,14 +49,31 @@ public class ItemServiceImpl implements ItemService{
 	private JmsTemplate jmsTemplate;
 	@Autowired
 	private Destination topicDestination;
-	
+	@Autowired
+	private JedisClient jedisClient;
+
+	@Value("${redis.item.pre}")
+	private String redisItemPre;
+	@Value("${item.cache.expire}")
+	private Integer redisItemExpire;
 	
 	/**
 	 * 根据商品编号获取商品信息
+     * redis缓存策略：key = 表名：主键：字段名。
+     * 避免key重复
 	 */
 	@Override
 	public TbItem getItemById(long itemId) {
-		TbItem item = itemMapper.selectByPrimaryKey(itemId);
+        String json = jedisClient.get(redisItemPre + ":" + itemId + ":BASE");
+        if(StringUtils.isNotBlank(json)){
+            TbItem tbItem = JsonUtils.jsonToObject(json, TbItem.class);
+            return tbItem;
+        }
+        TbItem item = itemMapper.selectByPrimaryKey(itemId);
+        //将数据放到redis中
+        jedisClient.set(redisItemPre + ":" + itemId + ":BASE",JsonUtils.objectToJson(item));
+        //设置过期时间
+        jedisClient.expire(redisItemPre + ":" + itemId + ":BASE",redisItemExpire);
 		return item;
 	}
 	@Override
