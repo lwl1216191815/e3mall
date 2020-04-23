@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -26,6 +28,12 @@ import cn.e3mall.pojo.TbItemDescExample;
 import cn.e3mall.pojo.TbItemDescExample.Criteria;
 import cn.e3mall.pojo.TbItemExample;
 import cn.e3mall.service.ItemService;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 @Service
 public class ItemServiceImpl implements ItemService{
 	@Autowired
@@ -34,6 +42,10 @@ public class ItemServiceImpl implements ItemService{
 	private TbItemDescMapper itemDescMapper;
 	@Autowired
 	private TbFileMapper fileMapper;
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	@Autowired
+	private Destination topicDestination;
 	
 	
 	/**
@@ -71,6 +83,13 @@ public class ItemServiceImpl implements ItemService{
 		desc.setUpdated(item.getCreated());
 		desc.setItemDesc(itemDesc);
 		itemDescMapper.insert(desc);
+		jmsTemplate.send(topicDestination, new MessageCreator() {
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				Message message = session.createTextMessage(String.valueOf(item.getId()));
+				return message;
+			}
+		});
 		return E3Result.ok();
 	}
 	@Override
