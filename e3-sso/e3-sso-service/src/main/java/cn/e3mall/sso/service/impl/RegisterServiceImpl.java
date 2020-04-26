@@ -5,9 +5,12 @@ import cn.e3mall.mapper.TbUserMapper;
 import cn.e3mall.pojo.TbUser;
 import cn.e3mall.pojo.TbUserExample;
 import cn.e3mall.sso.service.RegisterService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,5 +39,40 @@ public class RegisterServiceImpl implements RegisterService {
             return E3Result.ok(false);
         }
         return E3Result.ok(true);
+    }
+
+    @Override
+    public E3Result createUser(TbUser tbUser) {
+        if(StringUtils.isBlank(tbUser.getUsername())){
+            return E3Result.build(400,"用户名不能为空");
+        }
+        if(StringUtils.isBlank(tbUser.getPassword())){
+            return E3Result.build(400,"密码不能为空");
+        }
+        E3Result result = checkData(tbUser.getUsername(), 1);
+        if(!Boolean.valueOf(result.getData().toString())){
+            return E3Result.build(400,"此用户名已存在");
+        }
+        if(StringUtils.isNotBlank(tbUser.getPhone())){
+            result = checkData(tbUser.getPhone(),2);
+            if(!Boolean.valueOf(result.getData().toString())){
+                return E3Result.build(400,"此手机号已被使用");
+            }
+        }
+        if(StringUtils.isNotBlank(tbUser.getEmail())){
+            result = checkData(tbUser.getEmail(),3);
+            if(!Boolean.valueOf(result.getData().toString())){
+                return E3Result.build(400,"此邮箱已被使用");
+            }
+        }
+
+        tbUser.setCreated(new Date());
+        tbUser.setUpdated(new Date());
+
+        String password = DigestUtils.md5DigestAsHex(tbUser.getPhone().getBytes());
+        tbUser.setPassword(password);
+
+        tbUserMapper.insert(tbUser);
+        return E3Result.ok();
     }
 }
