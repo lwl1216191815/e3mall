@@ -16,9 +16,6 @@
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-		<!-- 静态资源放行 -->
-	<mvc:resources location="/css/" mapping="/css/**"/>
-	<mvc:resources location="/js/" mapping="/js/**"/>
 	<!-- 引用dubbo服务 -->
 	<dubbo:application name="e3-portal-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
