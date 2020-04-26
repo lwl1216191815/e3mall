@@ -36,7 +36,7 @@ public class LoginServiceImpl implements LoginService {
                 String token = UUID.randomUUID().toString();
                 jedisClient.set(userInfoRedisPrefix + ":" + token, JsonUtils.objectToJson(user));
                 jedisClient.expire(userInfoRedisPrefix + ":" + token,sessionExpire);
-                return E3Result.ok(user);
+                return E3Result.ok(token);
             }
         }
         return E3Result.build(400,"用户名或者密码错误");
