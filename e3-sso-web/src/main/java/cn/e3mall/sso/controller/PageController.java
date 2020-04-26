@@ -10,4 +10,9 @@ public class PageController {
     public String showRegister(){
         return "register";
     }
+
+    @RequestMapping(value = {"/page/login","/user/login"})
+    public String showLogin(){
+        return "login";
+    }
 }
