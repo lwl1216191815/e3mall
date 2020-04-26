@@ -22,7 +22,7 @@ public class LoginController {
     @RequestMapping(value="/user/login", method= RequestMethod.POST)
     public E3Result login(String username, String password, HttpServletRequest request, HttpServletResponse response){
         E3Result result = loginService.userLogin(username, password);
-        if(result.getStatus() != 400){
+        if(result.getStatus() == 200){
             String token = result.getData().toString();
             CookieUtils.setCookie(request,response,tokenKey,token);
         }
