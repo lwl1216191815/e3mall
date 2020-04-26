@@ -23,6 +23,7 @@
 	<dubbo:application name="e3-manage-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.sso.service.RegisterService" id="registerService" />
+	<dubbo:reference interface="cn.e3mall.sso.service.LoginService" id="loginService"/>
 	<!-- 静态资源放行 -->
 	<mvc:resources location="/css/" mapping="/css/**"/>
 	<mvc:resources location="/js/" mapping="/js/**"/>
