@@ -41,4 +41,13 @@ public class LoginServiceImpl implements LoginService {
         }
         return E3Result.build(400,"用户名或者密码错误");
     }
+
+    @Override
+    public E3Result userLogout(String token) {
+        Boolean exists = jedisClient.exists(userInfoRedisPrefix + ":" + token);
+        if(exists){
+            jedisClient.del(userInfoRedisPrefix + ":" + token);
+        }
+        return E3Result.ok();
+    }
 }
