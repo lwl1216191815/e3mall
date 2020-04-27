@@ -28,4 +28,15 @@ public class LoginController {
         }
         return result;
     }
+    @RequestMapping(value="/user/logout")
+    public E3Result logout(HttpServletRequest request,HttpServletResponse response){
+        String cookieValue = CookieUtils.getCookieValue(request, tokenKey, true);
+        E3Result result = loginService.userLogout(cookieValue);
+        if(result.getStatus() == 200){
+            CookieUtils.deleteCookie(request,response,tokenKey);
+        }
+        return result;
+    }
+
+
 }
