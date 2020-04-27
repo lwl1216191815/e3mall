@@ -261,14 +261,16 @@ function buyelse(pid){
   })
 }
 
-//商品和礼包加入购物车
-//@param product_id 商品id
-//@param cart_type 购物类型 0 普通商品
-//@param opencity_id 站点id
-//@param flag 提示方式 0本页提示 1跳转购物车
-//@param bs  加入时是否验证商品的礼品袋开关  1,是;0,否
-//@param obj 加入按钮对象
-//@param cfrom 从哪里点击的购物按钮
+/**
+ * 商品和礼包加入购物车
+ * @param product_id 商品id
+ * @param cart_type 购物类型 0 普通商品
+ * @param opencity_id 站点id
+ * @param flag 提示方式 0本页提示 1跳转购物车
+ * @param bs 加入时是否验证商品的礼品袋开关  1,是;0,否
+ * @param obj 加入按钮对象
+ * @param cfrom 从哪里点击的购物按钮
+ */
 function cartAdd(product_id,cart_type,opencity_id, flag,bs, obj, cfrom){
     //取购物车商品数量
 	var num = $("#number_" + product_id).val();
