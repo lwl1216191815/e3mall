@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
     private ItemService itemService;
     @Override
     public List<TbItem> getCartList(HttpServletRequest request) {
-        String json = CookieUtils.getCookieValue(request, cookieKey);
+        String json = CookieUtils.getCookieValue(request, cookieKey,true);
         if(StringUtils.isNotBlank(json)){
             List<TbItem> itemList = JsonUtils.jsonToList(json, TbItem.class);
             return itemList;
@@ -57,6 +57,6 @@ public class CartServiceImpl implements CartService {
             item.setNum(num);
             itemList.add(item);
         }
-        CookieUtils.setCookie(request,response,cookieKey,JsonUtils.objectToJson(itemList),cookieExpire,true);
+        CookieUtils.setCookie(request,response,cookieKey,JsonUtils.objectToJson(itemList),cookieExpire,"utf-8");
     }
 }
