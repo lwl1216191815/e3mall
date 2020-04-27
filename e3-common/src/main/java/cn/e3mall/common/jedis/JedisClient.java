@@ -73,4 +73,11 @@ public interface JedisClient {
 	 * @return
 	 */
 	Long hdel(String key,String...fileld);
+
+	/**
+	 * 删除某个key
+	 * @param key
+	 * @return
+	 */
+	Long del(String key);
 }
