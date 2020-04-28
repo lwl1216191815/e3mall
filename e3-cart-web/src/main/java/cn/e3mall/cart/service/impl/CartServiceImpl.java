@@ -30,24 +30,20 @@ public class CartServiceImpl implements CartService {
             List<TbItem> itemList = JsonUtils.jsonToList(json, TbItem.class);
             return itemList;
         }
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
+    /**
+     * 将商品加入购物车中，或者修改购物车汇总某件商品的数量
+     * @param itemId 商品ID。如果购物车内没有的话就会加入
+     * @param num 商品数量
+     * @param request
+     * @param response
+     */
     @Override
     public void addCartItem(Long itemId, Integer num, HttpServletRequest request, HttpServletResponse response) {
         List<TbItem> itemList = getCartList(request);
-        boolean hasItem = false;
-        if(itemList != null && !itemList.isEmpty()){
-            for (TbItem tbItem : itemList) {
-                if(tbItem.getId() == itemId.longValue()){
-                    tbItem.setNum(num);
-                    hasItem = true;
-                    break;
-                }
-            }
-        }else{
-            itemList = new ArrayList<>();
-        }
+        boolean hasItem = hasItem(itemId,itemList,num);
         if(!hasItem){
             TbItem item = itemService.getItemById(itemId);
             if(StringUtils.isNotBlank(item.getImage())){
@@ -58,5 +54,17 @@ public class CartServiceImpl implements CartService {
             itemList.add(item);
         }
         CookieUtils.setCookie(request,response,cookieKey,JsonUtils.objectToJson(itemList),cookieExpire,"utf-8");
+    }
+
+    private boolean hasItem(Long itemId,List<TbItem> itemList,Integer num){
+        if(itemList != null && !itemList.isEmpty()){
+            for (TbItem tbItem : itemList) {
+                if(tbItem.getId() == itemId.longValue()){
+                    tbItem.setNum(num);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
