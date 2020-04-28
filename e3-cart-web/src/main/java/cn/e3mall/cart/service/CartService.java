@@ -14,4 +14,6 @@ public interface CartService {
     List<TbItem> getCartList(HttpServletRequest request);
 
     void addCartItem(Long itemId, Integer num, HttpServletRequest request, HttpServletResponse response);
+
+    void deleteCartItem(Long itemId, HttpServletRequest request, HttpServletResponse response);
 }
