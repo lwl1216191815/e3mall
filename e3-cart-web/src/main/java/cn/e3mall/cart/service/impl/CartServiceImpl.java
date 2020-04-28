@@ -56,11 +56,36 @@ public class CartServiceImpl implements CartService {
         CookieUtils.setCookie(request,response,cookieKey,JsonUtils.objectToJson(itemList),cookieExpire,"utf-8");
     }
 
+    /**
+     * 删除购物车中的商品
+     * @param itemId
+     * @param request
+     * @param response
+     */
+    public void deleteCartItem(Long itemId,HttpServletRequest request, HttpServletResponse response){
+        List<TbItem> itemList = getCartList(request);
+        hasItem(itemId,itemList,0);
+        CookieUtils.setCookie(request,response,cookieKey,JsonUtils.objectToJson(itemList),cookieExpire,"utf-8");
+    }
+
+    /**
+     * 判断<code>itemList<code/>是否有指定<code>itemId<code/>的商品。
+     * 存在的返回true，不存在返回false。且如果<code>num<code/>大于0的话，
+     * 将更新此商品的数量。否则将从<code>itemList<code/>移除此商品
+     * @param itemId 商品的id
+     * @param itemList 购物车内的商品列表
+     * @param num 商品数量。大于0时更改商品数量，小于0的时候删除商品
+     * @return
+     */
     private boolean hasItem(Long itemId,List<TbItem> itemList,Integer num){
         if(itemList != null && !itemList.isEmpty()){
             for (TbItem tbItem : itemList) {
                 if(tbItem.getId() == itemId.longValue()){
-                    tbItem.setNum(num);
+                    if ((num == null || num <= 0)) {
+                        itemList.remove(tbItem);
+                    } else {
+                        tbItem.setNum(num);
+                    }
                     return true;
                 }
             }
