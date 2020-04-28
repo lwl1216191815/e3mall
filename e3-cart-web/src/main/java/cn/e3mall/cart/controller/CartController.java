@@ -2,6 +2,7 @@ package cn.e3mall.cart.controller;
 
 
 import cn.e3mall.cart.service.CartService;
+import cn.e3mall.common.exception.ItemDescNotFoundException;
 import cn.e3mall.common.util.E3Result;
 import cn.e3mall.pojo.TbItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,8 +52,15 @@ public class CartController {
     }
 
     @RequestMapping("/cart/update/num/{itemId}/{num}")
+    @ResponseBody
     public E3Result updateNum(@PathVariable Long itemId,@PathVariable Integer num,HttpServletRequest request,HttpServletResponse response){
         cartService.addCartItem(itemId,num,request,response);
         return E3Result.ok();
+    }
+
+    @RequestMapping("/cart/delete/{itemId}")
+    public String deleteCartItem(@PathVariable Long itemId,HttpServletRequest request,HttpServletResponse response){
+        cartService.deleteCartItem(itemId,request,response);
+        return "redirect:/cart/cart.html";
     }
 }
