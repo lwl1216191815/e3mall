@@ -10,7 +10,7 @@
          http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 	<!-- 加载配置文件 -->
 	<context:property-placeholder location="classpath:conf/resource.properties" />
-	<context:component-scan base-package="cn.e3mall.cart" />
+	<context:component-scan base-package="cn.e3mall.cart.controller" />
 	<mvc:annotation-driven />
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/" />
@@ -20,4 +20,5 @@
 	<dubbo:application name="e3-portal-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.service.ItemService" id="itemService" />
+	<dubbo:reference interface="cn.e3mall.sso.service.TokenService" id="tokenService" />
 </beans>
