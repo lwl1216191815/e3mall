@@ -22,7 +22,7 @@ public class TokenServiceImpl implements TokenService {
     public E3Result getUserByToken(String token) {
         String json = jedisClient.get(userInfoRedisPrefix + ":" + token);
         if(StringUtils.isBlank(json)){
-            return E3Result.build(400,"用户登录已经过期，请重新登录");
+            return E3Result.build(201,"用户登录已经过期，请重新登录");
         }
         jedisClient.expire(userInfoRedisPrefix + ":" + token,sessionExpire);
         TbUser tbUser = JsonUtils.jsonToObject(json, TbUser.class);
