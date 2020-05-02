@@ -1,10 +1,12 @@
 package cn.e3mall.cart.controller;
 
 
+import cn.e3mall.cart.service.CartService;
 import cn.e3mall.common.util.CookieUtils;
 import cn.e3mall.common.util.E3Result;
 import cn.e3mall.common.util.JsonUtils;
 import cn.e3mall.pojo.TbItem;
+import cn.e3mall.pojo.TbUser;
 import cn.e3mall.service.ItemService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,15 @@ public class CartController {
     private String cookieKey;
     @Value("${cart.cookie.expire}")
     private Integer cookieExpire;
+    @Autowired
+    private CartService cartService;
+    @Value("${user.key.in.request}")
+    private String userInRequest;
     /**
      * 将指定商品加入购物车。
+     * 先判断用户是否已经登录。
+     * 如果已经登录就将购物车加入redis中。
+     * 否则就将购物车写入Cookie
      * @param itemId 商品ID
      * @param num 需要加入购物车的商品的数量
      * @param request
@@ -41,6 +50,12 @@ public class CartController {
      */
     @RequestMapping("/cart/add/{itemId}")
     public String addCartItem(@PathVariable Long itemId, Integer num, HttpServletRequest request, HttpServletResponse response){
+        Object user = request.getAttribute(userInRequest);
+        if(user != null){
+            TbUser u = (TbUser) user;
+            cartService.addCart(u.getId(),itemId,num);
+            return "cartSuccess";
+        }
         List<TbItem> itemList = getCartList(request);
         boolean hasItem =false;
         if(itemList != null && !itemList.isEmpty()){
