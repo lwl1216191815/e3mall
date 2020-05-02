@@ -3,6 +3,8 @@ package cn.e3mall.common.jedis;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 /**
  * redis单机版实现类
  * @author Dragon
@@ -93,6 +95,14 @@ public class JedisClientPool implements JedisClient {
         Long result = jedis.del(key);
         jedis.close();
         return result;
+    }
+
+	@Override
+	public List<String> hvals(String key) {
+		Jedis jedis = jedisPool.getResource();
+        List<String> values = jedis.hvals(key);
+        jedis.close();
+        return values;
     }
 
 	public JedisPool getJedisPool() {
