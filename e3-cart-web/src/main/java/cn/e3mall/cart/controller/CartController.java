@@ -87,8 +87,19 @@ public class CartController {
      * @return
      */
     @RequestMapping("/cart/cart")
-    public String showCartList(HttpServletRequest request, Model model){
+    public String showCartList(HttpServletRequest request, Model model,HttpServletResponse response){
+        //1 先从cookie中拿到购物车列表
         List<TbItem> cartList = getCartList(request);
+        //2 判断用户是否登录
+        TbUser user = (TbUser) request.getAttribute(userInRequest);
+        //3 如果用户已经登录了
+        if(user != null){
+            //4 合并购物车
+            cartService.mergeCart(user.getId(),cartList);
+            //5 删除cookie中的购物车
+            CookieUtils.deleteCookie(request,response,cookieKey);
+            cartList = cartService.getCartList(user.getId());
+        }
         model.addAttribute("cartList",cartList);
         return "cart";
     }
@@ -96,6 +107,11 @@ public class CartController {
     @RequestMapping("/cart/update/num/{itemId}/{num}")
     @ResponseBody
     public E3Result updateNum(@PathVariable Long itemId,@PathVariable Integer num,HttpServletRequest request,HttpServletResponse response){
+        TbUser user = (TbUser) request.getAttribute(userInRequest);
+        if(user != null){
+            E3Result result = cartService.updateCartNum(user.getId(), itemId, num);
+            return result;
+        }
         List<TbItem> itemList = getCartList(request);
         boolean hasItem =false;
         if(itemList != null && !itemList.isEmpty()){
@@ -112,6 +128,11 @@ public class CartController {
 
     @RequestMapping("/cart/delete/{itemId}")
     public String deleteCartItem(@PathVariable Long itemId,HttpServletRequest request,HttpServletResponse response){
+        TbUser user = (TbUser) request.getAttribute(userInRequest);
+        if(user != null){
+            cartService.deleteCart(user.getId(),itemId);
+            return "redirect:/cart/cart.html";
+        }
         List<TbItem> cartList = getCartList(request);
         for (TbItem tbItem : cartList) {
             if (tbItem.getId() == itemId.longValue()) {
