@@ -21,4 +21,11 @@
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.service.ItemService" id="itemService" />
 	<dubbo:reference interface="cn.e3mall.sso.service.TokenService" id="tokenService" />
+	<dubbo:reference interface="cn.e3mall.cart.service.CartService" id="cartService"/>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="cn.e3mall.cart.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>
