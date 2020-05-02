@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CartServiceImpl implements CartService {
     @Value("${cart.redis.key.prefix}")
@@ -49,6 +52,51 @@ public class CartServiceImpl implements CartService {
         }
         item.setNum(num);
         jedisClient.hset(redisKey,field,JsonUtils.objectToJson(item));
+        return E3Result.ok();
+    }
+
+    @Override
+    public E3Result mergeCart(Long userId, List<TbItem> itemList) {
+        if(itemList != null && !itemList.isEmpty()){
+            for (TbItem tbItem : itemList) {
+                addCart(userId,tbItem.getId(),tbItem.getNum());
+            }
+        }
+        return E3Result.ok();
+    }
+
+    @Override
+    public List<TbItem> getCartList(Long userId) {
+        String redisKey = cartRedisKeyPrefix + ":" + String.valueOf(userId);
+        List<String> values = jedisClient.hvals(redisKey);
+        List<TbItem> itemList = new ArrayList<>(values.size());
+        for (String value : values) {
+            TbItem tbItem = JsonUtils.jsonToObject(value, TbItem.class);
+            itemList.add(tbItem);
+        }
+        return itemList;
+    }
+
+    @Override
+    public E3Result updateCartNum(Long userId, Long itemId, Integer num) {
+        //1 先判断此用户是否有购物车
+        String redisKey = cartRedisKeyPrefix + ":" + String.valueOf(userId);
+        String field = String.valueOf(itemId);
+        String json = jedisClient.hget(redisKey, field);
+        if(StringUtils.isNotBlank(json)){
+            TbItem item = JsonUtils.jsonToObject(json, TbItem.class);
+            item.setNum(num);
+            jedisClient.hset(redisKey,field,JsonUtils.objectToJson(item));
+            return E3Result.ok();
+        }
+        return  E3Result.build(500,"购物车中并没有这款商品");
+    }
+
+    @Override
+    public E3Result deleteCart(Long userId, Long itemId) {
+        String redisKey = cartRedisKeyPrefix + ":" + String.valueOf(userId);
+        String field = String.valueOf(itemId);
+        jedisClient.hdel(redisKey,field);
         return E3Result.ok();
     }
 }
