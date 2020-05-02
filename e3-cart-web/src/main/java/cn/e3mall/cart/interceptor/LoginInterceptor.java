@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor {
     @Value("${user.token.key}")
     private String userToken;
-    @Value("user.key.in.request")
+    @Value("${user.key.in.request}")
     private String keyOfUserInRequest;
     @Autowired
     private TokenService tokenService;
