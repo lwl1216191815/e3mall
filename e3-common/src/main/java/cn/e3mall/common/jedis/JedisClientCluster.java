@@ -2,6 +2,8 @@ package cn.e3mall.common.jedis;
 
 import redis.clients.jedis.JedisCluster;
 
+import java.util.List;
+
 /**
  * 集群版redis
  * @author Dragon
@@ -59,6 +61,12 @@ public class JedisClientCluster implements JedisClient {
 	public Long del(String key) {
 		Long del = jedisCluster.del(key);
 		return del;
+	}
+
+	@Override
+	public List<String> hvals(String key) {
+		List<String> values = jedisCluster.hvals(key);
+		return values;
 	}
 
 	public JedisCluster getJedisCluster() {
