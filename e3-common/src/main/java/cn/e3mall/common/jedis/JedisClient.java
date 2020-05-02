@@ -1,4 +1,7 @@
 package cn.e3mall.common.jedis;
+
+import java.util.List;
+
 /**
  * redis客户端接口
  * @author Dragon
@@ -80,4 +83,11 @@ public interface JedisClient {
 	 * @return
 	 */
 	Long del(String key);
+
+	/**
+	 * 获取所有的values
+	 * @param key
+	 * @return
+	 */
+	List<String> hvals(String key);
 }
