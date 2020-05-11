@@ -19,5 +19,5 @@
 	<!-- 引用dubbo服务 -->
 	<dubbo:application name="e3-order-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
-	<!--<dubbo:reference interface="cn.e3mall.content.service.ContentService" id="contentService" />-->
+	<dubbo:reference interface="cn.e3mall.cart.service.CartService" id="cartService" />
 </beans>
