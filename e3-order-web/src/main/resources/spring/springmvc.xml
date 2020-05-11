@@ -20,4 +20,12 @@
 	<dubbo:application name="e3-order-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.cart.service.CartService" id="cartService" />
+	<dubbo:reference interface="cn.e3mall.sso.service.TokenService" id="tokenService"/>
+	<!--拦截器设置-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="cn.e3mall.order.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>
