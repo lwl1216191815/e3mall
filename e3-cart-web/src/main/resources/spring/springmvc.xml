@@ -17,7 +17,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	<!-- 引用dubbo服务 -->
-	<dubbo:application name="e3-portal-web" />
+	<dubbo:application name="e3-cart-web" />
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.service.ItemService" id="itemService" />
 	<dubbo:reference interface="cn.e3mall.sso.service.TokenService" id="tokenService" />
