@@ -21,6 +21,7 @@
 	<dubbo:registry protocol="zookeeper" address="${zookeeper.address}" />
 	<dubbo:reference interface="cn.e3mall.cart.service.CartService" id="cartService" />
 	<dubbo:reference interface="cn.e3mall.sso.service.TokenService" id="tokenService"/>
+	<dubbo:reference interface="cn.e3mall.order.service.OrderService" id="orderService"/>
 	<!--拦截器设置-->
 	<mvc:interceptors>
 		<mvc:interceptor>
