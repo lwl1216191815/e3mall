@@ -3,8 +3,8 @@ package cn.e3mall.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import cn.e3mall.common.pojo.EasyUITreeNode;
 import cn.e3mall.mapper.TbItemCatMapper;
@@ -17,7 +17,7 @@ import cn.e3mall.service.ItemCatService;
  * @author Dragon
  *
  */
-@Service
+@Service(timeout = 600000)
 public class ItemCatServiceImpl implements ItemCatService {
 	@Autowired
 	private TbItemCatMapper itemCatMapper;

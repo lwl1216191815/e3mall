@@ -3,7 +3,7 @@ package cn.e3mall.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.alibaba.dubbo.config.annotation.Service;
 
 import cn.e3mall.common.util.E3Result;
 import cn.e3mall.mapper.TbItemParamItemMapper;
@@ -15,7 +15,7 @@ import cn.e3mall.service.ItemParamItemService;
  * @author Dragon
  *
  */
-@Service
+@Service(timeout = 600000)
 public class ItemParamItemServiceImpl implements ItemParamItemService {
 	@Autowired
 	private TbItemParamItemMapper itemParamItemMapper;

@@ -7,7 +7,7 @@ import cn.e3mall.common.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import com.alibaba.dubbo.config.annotation.Service;
 
 import cn.e3mall.common.exception.ItemDescNotFoundException;
 import cn.e3mall.common.util.E3Result;
@@ -21,7 +21,7 @@ import cn.e3mall.service.ItemDescService;
  * @author Dragon
  *
  */
-@Service
+@Service(timeout = 600000)
 public class ItemDescServiceImpl implements ItemDescService {
 	@Autowired
 	private TbItemDescMapper itemDescMapper;

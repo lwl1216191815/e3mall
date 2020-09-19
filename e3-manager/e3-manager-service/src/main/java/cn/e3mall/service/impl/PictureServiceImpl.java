@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import com.alibaba.dubbo.config.annotation.Service;
 
 import cn.e3mall.common.util.CommonUtils;
 import cn.e3mall.common.util.FileUtils;
@@ -17,7 +17,7 @@ import cn.e3mall.pojo.TbFileExample;
 import cn.e3mall.pojo.TbFileExample.Criteria;
 import cn.e3mall.service.PictureService;
 
-@Service
+@Service(timeout = 600000)
 public class PictureServiceImpl implements PictureService {
 	@Value("${file.uploadPath}")
 	private String configSaveFilePath;
